@@ -1,0 +1,9 @@
+{
+    "timestamp": "2025-03-23 10:39:00",
+    "temperature": 24.89,
+    "humidity": 69.0,
+    "soilMoisture": 33.2,
+    "soilPH": 7.31,
+    "lightIntensity": 471.37,
+    "anomaly": false
+}
