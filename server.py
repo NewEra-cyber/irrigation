@@ -10,7 +10,7 @@ from docx import Document
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Change this to a secure secret key
+app.secret_key = "your_secret_key"  # Change this to a secure key
 
 # Define paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,19 +21,6 @@ USER_DATA_FILE = os.path.join(BASE_DIR, 'users.json')
 # Ensure the records directory exists
 if not os.path.exists(RECORDS_DIR):
     os.makedirs(RECORDS_DIR)
-else:
-    # Delete all existing records in the records directory at startup
-    print("Deleting existing records...")
-    for filename in os.listdir(RECORDS_DIR):
-        file_path = os.path.join(RECORDS_DIR, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print(f"Failed to delete {file_path}. Reason: {e}")
-    print("Existing records deleted.")
 
 # Ensure the users file exists
 if not os.path.exists(USER_DATA_FILE):
@@ -90,8 +77,7 @@ def load_irrigation_data():
     try:
         with open(DATA_FILE, 'r') as f:
             return json.load(f)
-    except Exception as e:
-        print(f"Error loading irrigation data: {e}")
+    except Exception:
         return {
             "temperature": 25.0,
             "humidity": 60.0,
@@ -115,25 +101,14 @@ def save_record(data):
     doc.add_paragraph(f"Light Intensity: {data['lightIntensity']} lux")
     doc.add_paragraph(f"Anomaly: {data['anomaly']}")
     doc.save(filepath)
-    print(f"Saved record: {filename}")
 
 def save_records_periodically():
     while True:
         data = load_irrigation_data()
         save_record(data)
-        time.sleep(20 * 60)  # Sleep for 20 minutes
+        time.sleep(20 * 60)
 
-# Start the background task to save records
 threading.Thread(target=save_records_periodically, daemon=True).start()
-
-# Function to terminate the script after 50 minutes
-def terminate_script():
-    print("50 minutes elapsed. Terminating script...")
-    os._exit(0)  # Forcefully exit the script
-
-# Schedule script termination after 50 minutes (3000 seconds)
-threading.Timer(3000, terminate_script).start()
-print("Script will terminate automatically after 50 minutes.")
 
 @app.route('/api/irrigation-data')
 def get_irrigation_data():
@@ -158,5 +133,4 @@ if __name__ == '__main__':
     try:
         app.run(host='0.0.0.0', port=8000, debug=False)
     except KeyboardInterrupt:
-        print("Server terminated manually.")
         sys.exit(0)

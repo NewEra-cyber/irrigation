@@ -285,7 +285,7 @@
 
         .content {
             flex: 1;
-            padding: 40px;
+            padding: 10px; /* Reduced to minimize top space */
             margin-left: 0;
             transition: margin-left 0.3s ease;
             text-align: center;
@@ -344,6 +344,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            padding: 20px;
         }
 
         #welcome h1 {
@@ -417,7 +418,6 @@
             background: url('pictures/tv3xJT6Ayqlx8DPn-generated_image.jpg') no-repeat center center;
             background-size: cover;
             border-radius: 15px;
-            opacity: 0.7;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: transform 1s ease, box-shadow 1s ease;
             perspective: 1000px; /* Add 3D perspective */
@@ -484,16 +484,17 @@
             50% { border-color: #ffffff; }
         }
 
-        /* Home Section Colors */
+        /* Home Section Styles */
         #home {
             background: rgba(139, 69, 19, 0.6); /* Earthy brown tone for Home */
+            padding: 10px; /* Reduced padding to start content at the top */
         }
 
         #home h2, #home h1 {
             font-family: 'Times New Roman', serif;
             font-size: 24px;
             color: #ffebcd; /* Blanched almond for text */
-            margin-bottom: 20px;
+            margin: 10px 0; /* Reduced margin to minimize space */
         }
 
         #home .reading-label {
@@ -518,16 +519,17 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* Saved Records Section Colors */
+        /* Saved Records Section Styles */
         #records {
             background: rgba(0, 0, 0, 0.4); /* Black translucent */
+            padding: 10px; /* Reduced padding to start content at the top */
         }
 
         #records h2, #records h3 {
             font-family: 'Times New Roman', serif;
             font-size: 24px;
             color: #e6e6fa; /* Lavender for text */
-            margin: 20px 0 10px;
+            margin: 10px 0; /* Reduced margin to minimize space */
         }
 
         #records .reading-label {
@@ -556,7 +558,7 @@
             font-family: 'Times New Roman', serif;
             font-size: 14px;
             color: #ffffff;
-            margin-bottom: 20px;
+            margin: 10px 0; /* Reduced margin */
         }
 
         #records .records-list li {
@@ -591,23 +593,24 @@
             margin-left: 2px; /* Small spacing between value and unit */
         }
 
-        /* User Dashboard Section Colors */
+        /* User Dashboard Section Styles */
         #user {
             background: rgba(0, 0, 0, 0.6); /* Translucent black */
+            padding: 10px; /* Reduced padding to start content at the top */
         }
 
         #user h2, #user h3 {
             font-family: 'Times New Roman', serif;
             font-size: 32px; /* Increased to 32px */
             color: #98fb98; /* Pale green for text */
-            margin-bottom: 20px;
+            margin: 10px 0; /* Reduced margin to minimize space */
         }
 
         #user p {
             font-family: 'Times New Roman', serif;
             font-size: 18px; /* Increased to 18px */
             color: #ffffff;
-            margin-bottom: 20px;
+            margin: 10px 0; /* Reduced margin */
         }
 
         .data-container {
@@ -615,7 +618,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             max-width: 800px;
-            margin: 20px auto;
+            margin: 10px auto; /* Reduced margin to start closer to the top */
         }
 
         .reading {
@@ -634,7 +637,7 @@
             padding: 20px;
             border-radius: 8px;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 10px auto; /* Reduced margin to start closer to the top */
             text-align: center;
         }
 
@@ -747,24 +750,15 @@
 
         @media (max-width: 768px) {
             .content {
-                padding: 20px;
+                padding: 5px; /* Further reduce padding on smaller screens */
             }
 
-            .data-container {
-                grid-template-columns: 1fr;
+            #home, #records, #user {
+                padding: 5px; /* Reduce padding on smaller screens */
             }
 
-            .sidebar {
-                width: 200px;
-                left: -200px;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-
-            .content.shifted {
-                margin-left: 200px;
+            .data-container, .user-profile {
+                margin: 5px auto; /* Reduce margin on smaller screens */
             }
 
             .welcome-card, .slideshow-container {
@@ -848,12 +842,12 @@
                 <h1>IRRIGATION MONITORING SCHEME</h1>
                 <div class="scroll-container">
                     <div class="scroll-text">
-                        <span>Temperature readings</span>
-                        <span>Humidity readings</span>
-                        <span>Soil Moisture readings</span>
-                        <span>Soil pH readings</span>
-                        <span>Light Intensity readings</span>
-                        <span>Anomaly readings</span>
+                        <span>Temperature</span>
+                        <span>Humidity</span>
+                        <span>Soil Moisture</span>
+                        <span>Soil pH</span>
+                        <span>Light Intensity</span>
+                        <span>Anomaly</span>
                     </div>
                 </div>
                 <div class="welcome-card"></div>
