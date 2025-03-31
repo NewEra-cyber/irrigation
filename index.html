@@ -546,15 +546,12 @@
     const recordsTimer = document.getElementById('records-timer');
     const dateTimeDisplay = document.getElementById('date-time');
     const deleteAccountBtn = document.getElementById('delete-account');
-    // Deletion Modal Elements
     const deleteModal = document.getElementById('delete-modal');
     const confirmDeleteBtn = document.getElementById('confirm-delete');
     const cancelDeleteBtn = document.getElementById('cancel-delete');
-    // Registration new fields for role and secret key
     const regRole = document.getElementById('reg-role');
     const secretKeyGroup = document.getElementById('secret-key-group');
     const regSecretKey = document.getElementById('reg-secret-key');
-    // User Profile Elements
     const profilePicture = document.getElementById('profile-picture');
     const profilePicturePlaceholder = document.getElementById('profile-picture-placeholder');
     const profilePictureInput = document.getElementById('profile-picture-input');
@@ -563,31 +560,31 @@
     const roleDisplay = document.getElementById('role');
     const editProfileButton = document.getElementById('edit-profile');
     const saveProfileButton = document.getElementById('save-profile');
-    // Password Toggle Elements
     const togglePasswordLogin = document.getElementById('toggle-password-login');
     const togglePasswordReg = document.getElementById('toggle-password-reg');
-    // Demo Verification
     const demoVerification = document.getElementById('demo-verification');
     const demoVerifyLink = document.getElementById('demo-verify-link');
 
-    // --- Track Login State ---
+    // Base URL for API calls
+    const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : window.location.origin;
+
+    // Track login state and JWT token
     let isLoggedIn = false;
-    const isOnlineMode = window.location.protocol === 'http:' || window.location.protocol === 'https:';
-    let timerStart = null;
-    let lastData = null;
-    let timerInterval = null;
-    // Default user profile
-    let userProfile = { username: 'admin', email: 'admin@example.com', role: 'Administrator', picture: null };
+    let jwtToken = localStorage.getItem('jwtToken') || null;
+
+    // User profile management
+    let userProfile = { username: '', email: '', role: '', picture: null };
 
     function loadUserProfile() {
       const savedProfile = localStorage.getItem('userProfile');
       if (savedProfile) { userProfile = JSON.parse(savedProfile); }
       updateUserProfileDisplay();
     }
+
     function updateUserProfileDisplay() {
-      usernameDisplay.textContent = userProfile.username;
-      emailDisplay.textContent = userProfile.email;
-      roleDisplay.textContent = userProfile.role;
+      usernameDisplay.textContent = userProfile.username || 'N/A';
+      emailDisplay.textContent = userProfile.email || 'N/A';
+      roleDisplay.textContent = userProfile.role || 'N/A';
       if (userProfile.picture) {
         profilePicture.src = userProfile.picture;
         profilePicture.style.display = 'block';
@@ -597,10 +594,12 @@
         profilePicturePlaceholder.style.display = 'flex';
       }
     }
+
     function saveUserProfile() {
       localStorage.setItem('userProfile', JSON.stringify(userProfile));
       updateUserProfileDisplay();
     }
+
     profilePictureInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -612,55 +611,68 @@
         reader.readAsDataURL(file);
       }
     });
+
     editProfileButton.addEventListener('click', () => {
       usernameDisplay.contentEditable = true;
       emailDisplay.contentEditable = true;
-      roleDisplay.contentEditable = true;
       usernameDisplay.style.background = '#333';
       emailDisplay.style.background = '#333';
-      roleDisplay.style.background = '#333';
       editProfileButton.style.display = 'none';
       saveProfileButton.style.display = 'block';
     });
+
     saveProfileButton.addEventListener('click', async () => {
       userProfile.username = usernameDisplay.textContent;
       userProfile.email = emailDisplay.textContent;
-      userProfile.role = roleDisplay.textContent;
       usernameDisplay.contentEditable = false;
       emailDisplay.contentEditable = false;
-      roleDisplay.contentEditable = false;
       usernameDisplay.style.background = 'none';
       emailDisplay.style.background = 'none';
-      roleDisplay.style.background = 'none';
       editProfileButton.style.display = 'block';
       saveProfileButton.style.display = 'none';
-      saveUserProfile();
       try {
-        const response = await fetch('/api/updateuser', {
+        const response = await fetch(`${BASE_URL}/api/updateuser`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username: userProfile.username, email: userProfile.email})
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify({ username: userProfile.username, email: userProfile.email })
         });
         const result = await response.json();
-        if (!response.ok) { alert(result.message); }
-      } catch (error) { alert("Error updating user. Please try again."); }
+        if (response.ok) {
+          userProfile = result.user;
+          saveUserProfile();
+        } else {
+          alert(result.message);
+        }
+      } catch (error) {
+        alert("Error updating user. Please try again.");
+      }
     });
+
     function updateDateTime() {
       const now = new Date();
-      const options = {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'};
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
       dateTimeDisplay.textContent = now.toLocaleDateString('en-US', options);
     }
+
     window.addEventListener('load', () => {
-      isLoggedIn = false;
-      loginSection.classList.add('active');
-      dashboardSection.classList.remove('active');
-      document.body.classList.add('login-active');
-      document.body.classList.remove('dashboard-active');
-      document.body.style.backgroundImage = "url('pictures/pexels-souvenirpixels-417074.jpg')";
+      isLoggedIn = !!jwtToken;
+      if (isLoggedIn) {
+        showDashboard();
+      } else {
+        loginSection.classList.add('active');
+        dashboardSection.classList.remove('active');
+        document.body.classList.add('login-active');
+        document.body.classList.remove('dashboard-active');
+        document.body.style.backgroundImage = "url('pictures/pexels-souvenirpixels-417074.jpg')";
+      }
       loadUserProfile();
       updateDateTime();
       setInterval(updateDateTime, 1000);
     });
+
     function showDashboard() {
       loginSection.classList.remove('active');
       dashboardSection.classList.add('active');
@@ -672,7 +684,7 @@
       startTimer();
       startSlideshow();
     }
-    // --- Registration: Show secret key field when admin selected ---
+
     regRole.addEventListener('change', () => {
       if (regRole.value === 'admin') {
         secretKeyGroup.classList.remove('hidden');
@@ -681,18 +693,23 @@
         regSecretKey.value = '';
       }
     });
+
     loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('irrigator-id').value;
       const password = document.getElementById('access-code').value;
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch(`${BASE_URL}/api/login`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username, password})
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
         });
         const result = await response.json();
         if (response.ok) {
+          jwtToken = result.token;
+          localStorage.setItem('jwtToken', jwtToken);
+          userProfile = result.user;
+          saveUserProfile();
           isLoggedIn = true;
           showDashboard();
         } else {
@@ -702,6 +719,7 @@
         errorMessage.textContent = 'An error occurred. Please try again.';
       }
     });
+
     registerForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('reg-username').value;
@@ -710,15 +728,14 @@
       const role = document.getElementById('reg-role').value;
       const secret_key = regSecretKey.value;
       try {
-        const response = await fetch('/api/register', {
+        const response = await fetch(`${BASE_URL}/api/register`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username, email, password, role, secret_key})
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password, role, secret_key })
         });
         const result = await response.json();
         if (response.ok) {
           alert('Registration successful! Please check your email for the verification link.');
-          // For demo, show the verification link:
           demoVerification.classList.remove('hidden');
           demoVerifyLink.href = result.verification_link;
           demoVerifyLink.textContent = result.verification_link;
@@ -731,58 +748,70 @@
         regErrorMessage.textContent = 'An error occurred. Please try again.';
       }
     });
+
     toggleRegister.addEventListener('click', () => {
       loginForm.classList.add('hidden');
       registerForm.classList.remove('hidden');
     });
-    toggleLogin && toggleLogin.addEventListener('click', () => {
+
+    toggleLogin.addEventListener('click', () => {
       registerForm.classList.add('hidden');
       loginForm.classList.remove('hidden');
     });
+
     googleSigninBtn.addEventListener('click', () => {
-      window.location.href = '/api/google';
+      window.location.href = `${BASE_URL}/api/google`;
     });
-    // --- Delete Account: Open modal window ---
+
     deleteAccountBtn.addEventListener('click', () => {
       deleteModal.style.display = 'block';
     });
+
     confirmDeleteBtn.addEventListener('click', async () => {
+      const password = prompt("Please enter your password to confirm deletion:");
       try {
-        const response = await fetch('/api/deleteaccount', {
+        const response = await fetch(`${BASE_URL}/api/deleteaccount`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username: userProfile.username, password: prompt("Please enter your password to confirm deletion:")})
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify({ password })
         });
         const result = await response.json();
         if (response.ok) {
           alert(result.message);
+          localStorage.removeItem('jwtToken');
+          localStorage.removeItem('userProfile');
+          jwtToken = null;
+          isLoggedIn = false;
           window.location.reload();
         } else {
           alert(result.message);
-          deleteModal.style.display = 'none';
         }
       } catch (error) {
         alert("Error deleting account. Please try again.");
+      } finally {
         deleteModal.style.display = 'none';
       }
     });
+
     cancelDeleteBtn.addEventListener('click', () => {
       deleteModal.style.display = 'none';
     });
-    document.querySelectorAll('.links a')[0].addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = 'reset-password.html';
-    });
+
     hamburger.addEventListener('click', () => {
       sidebar.classList.toggle('active');
       overlay.classList.toggle('active');
       content.classList.toggle('shifted');
     });
+
     overlay.addEventListener('click', () => {
       sidebar.classList.remove('active');
       overlay.classList.remove('active');
       content.classList.remove('shifted');
     });
+
     let currentSection = 'welcome';
     document.querySelectorAll('.menu a').forEach(link => {
       link.addEventListener('click', function(e) {
@@ -812,11 +841,14 @@
         content.classList.remove('shifted');
       });
     });
+
     // --- Data Updates (Fetch from backend) ---
     async function updateReadings() {
       if (!isLoggedIn) return;
       try {
-        const response = await fetch('/api/irrigation-data');
+        const response = await fetch(`${BASE_URL}/api/irrigation-data`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         const dataString = JSON.stringify(data);
@@ -826,25 +858,28 @@
         }
         document.getElementById('temperature').innerHTML = `${data.temperature}<span class="unit">°C</span>`;
         document.getElementById('humidity').innerHTML = `${data.humidity}<span class="unit">%</span>`;
-        document.getElementById('soil-moisture').innerHTML = `${data.soilMoisture}<span class="unit">%</span>`;
-        document.getElementById('soil-ph').textContent = data.soilPH;
-        document.getElementById('light-intensity').innerHTML = `${data.lightIntensity}<span class="unit"> lux</span>`;
-        document.getElementById('anomaly').textContent = data.anomaly;
+        document.getElementById('soil-moisture').innerHTML = `${data.soil_moisture}<span class="unit">%</span>`;
+        document.getElementById('soil-ph').textContent = data.soil_ph;
+        document.getElementById('light-intensity').innerHTML = `${data.light_intensity}<span class="unit"> lux</span>`;
+        document.getElementById('anomaly').textContent = data.anomaly ? 'Yes' : 'No';
         document.getElementById('records-temperature').innerHTML = `${data.temperature}<span class="unit">°C</span>`;
         document.getElementById('records-humidity').innerHTML = `${data.humidity}<span class="unit">%</span>`;
-        document.getElementById('records-soil-moisture').innerHTML = `${data.soilMoisture}<span class="unit">%</span>`;
-        document.getElementById('records-soil-ph').textContent = data.soilPH;
-        document.getElementById('records-light-intensity').innerHTML = `${data.lightIntensity}<span class="unit"> lux</span>`;
-        document.getElementById('records-anomaly').textContent = data.anomaly;
+        document.getElementById('records-soil-moisture').innerHTML = `${data.soil_moisture}<span class="unit">%</span>`;
+        document.getElementById('records-soil-ph').textContent = data.soil_ph;
+        document.getElementById('records-light-intensity').innerHTML = `${data.light_intensity}<span class="unit"> lux</span>`;
+        document.getElementById('records-anomaly').textContent = data.anomaly ? 'Yes' : 'No';
         updatePieChart(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
+
     async function updateRecordsList() {
       if (!isLoggedIn) return;
       try {
-        const response = await fetch('/api/records');
+        const response = await fetch(`${BASE_URL}/api/records`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
         if (!response.ok) throw new Error('Network response was not ok');
         const records = await response.json();
         if (records.length === 0) {
@@ -852,7 +887,7 @@
         } else {
           recordsList.innerHTML = records.map(record => {
             const timestamp = record.replace('record_', '').replace('.docx', '').replace(/_/g, ' ');
-            return `<li>Record from ${timestamp}: <a href="records/${record}" download class="download-symbol">⬇</a></li>`;
+            return `<li>Record from ${timestamp}: <a href="${BASE_URL}/records/${record}" download class="download-symbol">⬇</a></li>`;
           }).join('');
         }
       } catch (error) {
@@ -860,14 +895,21 @@
         recordsList.innerHTML = '<li>Error loading records.</li>';
       }
     }
+
     function startDataUpdates() {
       updateReadings();
-      setInterval(updateReadings, 10000); // update every 10 seconds from backend
+      setInterval(updateReadings, 10000); // Update every 10 seconds
     }
+
     function startRecordsUpdates() {
       updateRecordsList();
       setInterval(updateRecordsList, 10000);
     }
+
+    let timerStart = null;
+    let lastData = null;
+    let timerInterval = null;
+
     function startTimer() {
       timerStart = performance.now();
       timerInterval = setInterval(() => {
@@ -878,10 +920,12 @@
         recordsTimer.textContent = `Next update in: ${seconds}.${microseconds.toString().padStart(3, '0')}s`;
       }, 10);
     }
+
     function resetTimer() {
       timerStart = performance.now();
       recordsTimer.textContent = 'Next update in: 10.000s';
     }
+
     function startSlideshow() {
       const images = document.querySelectorAll('.slideshow-image');
       let currentIndex = 0;
@@ -894,16 +938,17 @@
       }
       setInterval(showNextImage, 5000);
     }
+
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const values = [
         parseFloat(data.temperature),
         parseFloat(data.humidity),
-        parseFloat(data.soilMoisture),
-        parseFloat(data.soilPH),
-        parseFloat(data.lightIntensity)
+        parseFloat(data.soil_moisture),
+        parseFloat(data.soil_ph),
+        parseFloat(data.light_intensity)
       ];
-      if(window.myPieChart) {
+      if (window.myPieChart) {
         window.myPieChart.data.datasets[0].data = values;
         window.myPieChart.update();
       } else {
@@ -911,30 +956,24 @@
           type: 'pie',
           data: {
             labels: ['Temperature', 'Humidity', 'Soil Moisture', 'Soil pH', 'Light Intensity'],
-            datasets: [{
-              data: values,
-              backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8bc34a', '#9c27b0']
-            }]
+            datasets: [{ data: values, backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8bc34a', '#9c27b0'] }]
           },
           options: { responsive: true }
         });
       }
     }
+
     togglePasswordLogin.addEventListener('click', function() {
       const passField = document.getElementById('access-code');
       if (passField.type === 'password') { passField.type = 'text'; this.textContent = 'Hide'; }
       else { passField.type = 'password'; this.textContent = 'Show'; }
     });
+
     togglePasswordReg.addEventListener('click', function() {
       const passField = document.getElementById('reg-password');
       if (passField.type === 'password') { passField.type = 'text'; this.textContent = 'Hide'; }
       else { passField.type = 'password'; this.textContent = 'Show'; }
     });
-    // Start periodic updates
-    startDataUpdates();
-    startRecordsUpdates();
-    startTimer();
-    startSlideshow();
   </script>
 </body>
 </html>
