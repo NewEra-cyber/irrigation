@@ -7,7 +7,7 @@
   <!-- Chart.js for pie chart rendering -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Original styles preserved */
+    /* Preserve your original styles */
     body {
       font-family: 'Times New Roman', serif;
       background-size: cover;
@@ -23,7 +23,6 @@
       overflow-x: hidden;
       transition: background-image 1s ease-in-out;
     }
-    /* Overlay for login section */
     body.login-active::before {
       content: '';
       position: fixed;
@@ -34,7 +33,6 @@
       background: rgba(52, 199, 89, 0.3);
       z-index: -1;
     }
-    /* Overlay for dashboard section */
     body.dashboard-active::before {
       content: '';
       position: fixed;
@@ -45,7 +43,7 @@
       background: rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
-    /* Login Section Styles */
+    /* Login Section */
     .login-section {
       display: none;
       text-align: center;
@@ -53,16 +51,13 @@
       max-width: 400px;
       padding: 20px;
     }
-    .login-section.active {
-      display: block;
-    }
+    .login-section.active { display: block; }
     .login-box {
-      position: relative;
       background: #2d2d39;
       border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
       padding: 20px;
+      position: relative;
     }
     .login-box::before {
       content: '';
@@ -84,326 +79,87 @@
       border-radius: 15px;
       z-index: -1;
     }
-    @keyframes rotating {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .login-header {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .login-header h2 {
-      font-family: 'Times New Roman', serif;
-      font-weight: bold;
-      color: rgb(47, 241, 8);
-      text-shadow: 0 0 10px #080808, 0 0 20px #1e1b1e, 0 0 30px #e40c45;
-      display: inline-block;
-      margin: 0;
-    }
-    .heart {
-      font-size: 20px;
-      background: linear-gradient(45deg, #f23708, #09f3112c);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-right: 10px;
-    }
-    .description {
-      margin: 10px 0 20px;
-      color: #139ef4;
-      font-size: 16px;
-      text-align: center;
-    }
-    .form-group {
-      margin: 0 20px 20px 20px;
-      position: relative;
-    }
-    .form-group label {
-      display: block;
-      color: white;
-      margin-bottom: 5px;
-      font-family: 'Times New Roman', serif;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 10px;
-      background: transparent;
-      border: 1px solid white;
-      border-radius: 5px;
-      color: white;
-      font-family: 'Times New Roman', serif;
-      box-sizing: border-box;
-    }
-    .form-group input::placeholder {
-      color: #b0b0b0;
-    }
-    /* Show/Hide Password Toggle */
+    @keyframes rotating { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .login-header { margin: 20px 0; text-align: center; }
+    .login-header h2 { font-weight: bold; color: rgb(47,241,8); text-shadow: 0 0 10px #080808, 0 0 20px #1e1b1e, 0 0 30px #e40c45; margin: 0; }
+    .heart { font-size: 20px; background: linear-gradient(45deg, #f23708, #09f3112c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-right: 10px; }
+    .description { margin: 10px 0 20px; color: #139ef4; font-size: 16px; text-align: center; }
+    .form-group { margin: 0 20px 20px 20px; position: relative; }
+    .form-group label { display: block; color: white; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 10px; background: transparent; border: 1px solid white; border-radius: 5px; color: white; box-sizing: border-box; }
+    .form-group input::placeholder { color: #b0b0b0; }
     .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 40px;
-      cursor: pointer;
-      font-size: 12px;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 2px 5px;
-      border-radius: 5px;
+      position: absolute; right: 10px; top: 40px; cursor: pointer; font-size: 12px; color: #fff; background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 5px;
     }
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 0 20px;
+    .buttons { display: flex; justify-content: space-between; gap: 10px; margin: 0 20px; }
+    .buttons button { flex: 1; padding: 10px 20px; border: none; border-radius: 20px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    .signin-button { background: url('pictures/pexels-souvenirpixels-417074.jpg') no-repeat center center; background-size: cover; color: white; }
+    .signup-button { background: url('pictures/pexels-souvenirpixels-417074.jpg') no-repeat center center; background-size: cover; color: white; }
+    .google-button {
+      background: #000; color: #fff; padding: 10px; border: none; border-radius: 5px; cursor: pointer;
+      width: 100%; display: flex; align-items: center; justify-content: center; margin-top: 10px;
     }
-    .buttons button {
-      flex: 1;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      font-weight: bold;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: 'Times New Roman', serif;
-    }
-    .signin-button {
-      background: url('pictures/pexels-souvenirpixels-417074.jpg') no-repeat center center;
-      background-size: cover;
-      color: white;
-    }
-    .signup-button {
-      background: url('pictures/pexels-souvenirpixels-417074.jpg') no-repeat center center;
-      background-size: cover;
-      color: white;
-    }
-    .links {
-      display: flex;
-      justify-content: space-between;
-      margin: 20px 20px 0;
-    }
-    .links a {
-      color: #b0b0b0;
-      text-decoration: none;
-      font-size: 12px;
-      font-family: 'Times New Roman', serif;
-    }
-    .links a:hover {
-      text-decoration: underline;
-    }
-    .error-message {
-      color: #ff4444;
-      font-size: 12px;
-      text-align: center;
-      margin-top: 10px;
-      font-family: 'Times New Roman', serif;
-    }
+    .google-button .google-icon { width: 20px; height: 20px; margin-right: 8px; }
+    .links { display: flex; justify-content: space-between; margin: 20px 20px 0; }
+    .links a { color: #b0b0b0; text-decoration: none; font-size: 12px; }
+    .links a:hover { text-decoration: underline; }
+    .error-message { color: #ff4444; font-size: 12px; text-align: center; margin-top: 10px; }
     .hidden { display: none; }
     .form-toggle { margin: 10px 0; cursor: pointer; color: #00ccff; text-decoration: underline; }
-    /* Updated Google Button Style */
-    .google-button {
-      background: #000;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: 'Times New Roman', serif;
-      margin-top: 10px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* New fields for role selection in registration */
+    .form-group select, .form-group input.secret-key {
+      width: 100%; padding: 10px; background: transparent; border: 1px solid white; border-radius: 5px; color: white; margin-top: 5px;
     }
-    .google-button .google-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
-    .delete-button {
-      background: #ff4444;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-    /* Dashboard Section Styles */
-    .dashboard-section {
-      display: none;
-      width: 100%;
-    }
-    .dashboard-section.active {
-      display: block;
-    }
+    /* Dashboard Section Styles (unchanged) */
+    .dashboard-section { display: none; width: 100%; }
+    .dashboard-section.active { display: block; }
     .sidebar {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 300px;
-      height: 100%;
-      background: url('pictures/pexels-tdcat-347729.jpg') no-repeat center center;
-      background-size: cover;
-      filter: brightness(80%);
-      transition: left 1s ease;
-      z-index: 1000;
-      padding-top: 20px;
+      position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
+      background: url('pictures/pexels-tdcat-347729.jpg') no-repeat center center; background-size: cover;
+      filter: brightness(80%); transition: left 1s ease; z-index: 1000; padding-top: 20px;
     }
-    .sidebar.active {
-      left: 0;
-    }
-    .hamburger {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-size: 24px;
-      color: #fff;
-      cursor: pointer;
-      z-index: 1001;
-    }
-    .hamburger::before {
-      content: '☰';
-    }
-    .menu ul {
-      list-style: none;
-      padding: 0;
-    }
-    .menu li {
-      margin: 20px 0;
-      text-align: center;
-    }
+    .sidebar.active { left: 0; }
+    .hamburger { position: fixed; top: 20px; left: 20px; font-size: 24px; color: #fff; cursor: pointer; z-index: 1001; }
+    .hamburger::before { content: '☰'; }
+    .menu ul { list-style: none; padding: 0; }
+    .menu li { margin: 20px 0; text-align: center; }
     .menu a {
-      display: block;
-      padding: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      transition: background 1s, transform 1s;
+      display: block; padding: 20px; font-size: 18px; font-weight: bold; color: white; text-decoration: none;
+      background: rgba(0, 0, 0, 0.4); border-radius: 10px; transition: background 1s, transform 1s;
     }
-    .menu a:hover, .menu a.active {
-      background: rgba(0, 0, 0, 0.4);
-      transform: scale(1.05);
-    }
-    .menu .desc {
-      font-size: 14px;
-      font-style: italic;
-      color: #ddd;
-      margin-top: 5px;
-    }
-    .content {
-      flex: 1;
-      padding: 10px;
-      margin-left: 0;
-      transition: margin-left 0.3s ease;
-      text-align: center;
-      position: relative;
-    }
-    .content.shifted {
-      margin-left: 300px;
-    }
-    .date-time {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-family: 'Times New Roman', serif;
-      font-size: 16px;
-      color: #ffffff;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    .timer {
-      font-family: 'Times New Roman', serif;
-      font-size: 2em;
-      color: #ffffff;
-      margin-top: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 5px 10px;
-      border-radius: 5px;
-      display: inline-block;
-    }
+    .menu a:hover, .menu a.active { background: rgba(0, 0, 0, 0.4); transform: scale(1.05); }
+    .menu .desc { font-size: 14px; font-style: italic; color: #ddd; margin-top: 5px; }
+    .content { flex: 1; padding: 10px; margin-left: 0; transition: margin-left 0.3s ease; text-align: center; position: relative; }
+    .content.shifted { margin-left: 300px; }
+    .date-time { position: absolute; top: 20px; right: 20px; font-size: 16px; color: #ffffff; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px; }
+    .timer { font-size: 2em; color: #ffffff; margin-top: 10px; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px; display: inline-block; }
     .section {
-      display: none;
-      border-radius: 0;
-      padding: 20px;
-      box-shadow: none;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out, transform 1s ease-in-out;
-      transform: scaleX(1);
+      display: none; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out, transform 1s ease-in-out; transform: scaleX(1);
     }
-    .section.active {
-      display: block;
-      opacity: 1;
-      transform: scaleX(1);
-    }
-    .section.mirror-out {
-      transform: scaleX(-1);
-      opacity: 0;
-    }
-    .section.mirror-in {
-      transform: scaleX(1);
-      opacity: 1;
-    }
+    .section.active { display: block; opacity: 1; transform: scaleX(1); }
+    .section.mirror-out { transform: scaleX(-1); opacity: 0; }
+    .section.mirror-in { transform: scaleX(1); opacity: 1; }
     /* Welcome Section Styles */
     #welcome {
-      background: rgba(0, 0, 0, 0.4);
-      width: 100%;
-      min-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: 20px;
+      background: rgba(0,0,0,0.4); width: 100%; min-height: 80vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px; position: relative;
     }
     #welcome h1 {
-      font-family: 'Times New Roman', serif;
-      font-size: 36px;
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      font-size: 36px; color: #ffffff; text-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin-bottom: 20px; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
     }
     /* Pie Chart Styles */
-    #pieChartContainer {
-      margin: 20px auto;
-      max-width: 400px;
-      width: 100%;
-    }
+    #pieChartContainer { margin: 20px auto; max-width: 400px; width: 100%; }
     /* Infinite Scroll Animation */
     .scroll-container {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 10px 0;
-      margin-bottom: 30px;
-      height: 40px;
-      overflow: hidden;
+      width: 100%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.4);
+      padding: 10px 0; margin-bottom: 30px; height: 40px; overflow: hidden;
     }
     .scroll-text {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      width: 100%;
-      height: 100%;
+      display: flex; justify-content: center; align-items: center; position: relative; width: 100%; height: 100%;
     }
     .scroll-text span {
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
-      color: #ffffff;
-      filter: grayscale(100%);
-      position: absolute;
-      opacity: 0;
+      font-size: 18px; color: #ffffff; filter: grayscale(100%); position: absolute; opacity: 0;
       animation: fade 30s infinite;
     }
     .scroll-text span:nth-child(1) { animation-delay: 0s; }
@@ -413,323 +169,118 @@
     .scroll-text span:nth-child(5) { animation-delay: 20s; }
     .scroll-text span:nth-child(6) { animation-delay: 25s; }
     @keyframes fade {
-      0% { opacity: 0; }
-      3.33% { opacity: 1; }
-      13.33% { opacity: 1; }
-      16.66% { opacity: 0; }
-      100% { opacity: 0; }
+      0% { opacity: 0; } 3.33% { opacity: 1; } 13.33% { opacity: 1; } 16.66% { opacity: 0; } 100% { opacity: 0; }
     }
-    /* Card with Hovering Effect */
+    /* Card Hover Effect */
     .welcome-card {
-      position: absolute;
-      left: 50px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 280px;
-      height: 373px;
-      background: url('pictures/tv3xJT6Ayqlx8DPn-generated_image.jpg') no-repeat center center;
-      background-size: cover;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 1s ease, box-shadow 1s ease;
-      perspective: 1000px;
+      position: absolute; left: 50px; top: 50%; transform: translateY(-50%);
+      width: 280px; height: 373px; background: url('pictures/tv3xJT6Ayqlx8DPn-generated_image.jpg') no-repeat center center;
+      background-size: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: transform 1s ease, box-shadow 1s ease; perspective: 1000px;
     }
     .welcome-card:hover {
       transform: translateY(-50%) translateZ(100px) rotateX(75deg);
-      box-shadow: 10px 10px 10px rgba(153, 153, 153, 0.5), inset -10px -10px 10px rgba(255, 255, 255, 0.3);
+      box-shadow: 10px 10px 10px rgba(153,153,153,0.5), inset -10px -10px 10px rgba(255,255,255,0.3);
     }
-    /* Slideshow on the Right */
+    /* Slideshow Styles */
     .slideshow-container {
-      position: absolute;
-      right: 50px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 300px;
-      height: 400px;
-      overflow: hidden;
-      border-radius: 15px;
+      position: absolute; right: 50px; top: 50%; transform: translateY(-50%);
+      width: 300px; height: 400px; overflow: hidden; border-radius: 15px;
     }
     .slideshow-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.7;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transition: opacity 1s ease-in-out;
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
+      position: absolute; top: 0; left: 0; transition: opacity 1s ease-in-out;
     }
-    .slideshow-image.active {
-      opacity: 0.7;
-    }
-    .slideshow-image.inactive {
-      opacity: 0;
-    }
-    /* Footnote with Typing Effect */
+    .slideshow-image.active { opacity: 0.7; }
+    .slideshow-image.inactive { opacity: 0; }
+    /* Footnote Typing Effect */
     .footnote {
-      position: absolute;
-      bottom: 20px;
-      width: 80%;
-      text-align: center;
-      font-family: 'Times New Roman', serif;
-      font-size: 16px;
-      color: #ffffff;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid #ffffff;
-      animation: typing 5s steps(60, end) infinite, blink 0.75s step-end infinite;
+      position: absolute; bottom: 20px; width: 80%; text-align: center;
+      font-size: 16px; color: #ffffff; overflow: hidden; white-space: nowrap;
+      border-right: 2px solid #ffffff; animation: typing 5s steps(60, end) infinite, blink 0.75s step-end infinite;
     }
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-    @keyframes blink {
-      from, to { border-color: transparent; }
-      50% { border-color: #ffffff; }
-    }
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @keyframes blink { from, to { border-color: transparent; } 50% { border-color: #ffffff; } }
     /* Home Section Styles */
-    #home {
-      background: rgba(139, 69, 19, 0.6);
-      padding: 10px;
-    }
-    #home h2, #home h1 {
-      font-family: 'Times New Roman', serif;
-      font-size: 24px;
-      color: #ffebcd;
-      margin: 10px 0;
-    }
-    #home .reading-label {
-      font-family: 'Times New Roman', serif;
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #ffebcd;
-      font-weight: bold;
-    }
+    #home { background: rgba(139,69,19,0.6); padding: 10px; }
+    #home h1, #home h2 { font-size: 24px; color: #ffebcd; margin: 10px 0; }
+    #home .reading-label { font-size: 22px; margin-bottom: 10px; color: #ffebcd; font-weight: bold; }
     #home .data-box {
-      background: linear-gradient(145deg, rgba(210, 180, 140, 0.7), rgba(200, 170, 130, 0.8));
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 20px;
-      width: 100%;
-      text-align: center;
-      color: #8b4513;
-      font-family: 'Times New Roman', serif;
-      font-size: 24px;
-      font-weight: bold;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(145deg, rgba(210,180,140,0.7), rgba(200,170,130,0.8));
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 20px;
+      width: 100%; text-align: center; color: #8b4513; font-size: 24px; font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
     /* Saved Records Section Styles */
-    #records {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 10px;
-    }
-    #records h2, #records h3 {
-      font-family: 'Times New Roman', serif;
-      font-size: 24px;
-      color: #e6e6fa;
-      margin: 10px 0;
-    }
-    #records .reading-label {
-      font-family: 'Times New Roman', serif;
-      font-size: 22px;
-      margin-bottom: 10px;
-      color: #e6e6fa;
-      font-weight: bold;
-    }
+    #records { background: rgba(0,0,0,0.4); padding: 10px; }
+    #records h2, #records h3 { font-size: 24px; color: #e6e6fa; margin: 10px 0; }
+    #records .reading-label { font-size: 22px; margin-bottom: 10px; color: #e6e6fa; font-weight: bold; }
     #records .data-box {
-      background: linear-gradient(145deg, rgba(0, 0, 0, 0.4), rgba(20, 20, 20, 0.5));
-      border: 1px solid #000000;
-      border-radius: 10px;
-      padding: 20px;
-      width: 100%;
-      text-align: center;
-      color: #191970;
-      font-family: 'Times New Roman', serif;
-      font-size: 24px;
-      font-weight: bold;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(20,20,20,0.5));
+      border: 1px solid #000; border-radius: 10px; padding: 20px; width: 100%;
+      text-align: center; color: #191970; font-size: 24px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    #records p {
-      font-family: 'Times New Roman', serif;
-      font-size: 14px;
-      color: #ffffff;
-      margin: 10px 0;
-    }
+    #records p { font-size: 14px; color: #ffffff; margin: 10px 0; }
     #records .records-list li {
-      background: rgba(17, 17, 17, 0.7);
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: 'Times New Roman', serif;
-      font-size: 14px;
-      color: #ffffff;
+      background: rgba(17,17,17,0.7); padding: 15px; margin-bottom: 10px;
+      border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+      font-size: 14px; color: #ffffff;
     }
-    .download-symbol {
-      color: #00ccff;
-      font-size: 20px;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .download-symbol:hover {
-      color: #00aaff;
-    }
-    .data-box .unit {
-      font-size: 18px;
-      vertical-align: super;
-      margin-left: 2px;
-    }
+    .download-symbol { color: #00ccff; font-size: 20px; text-decoration: none; transition: color 0.3s ease; }
+    .download-symbol:hover { color: #00aaff; }
+    .data-box .unit { font-size: 18px; vertical-align: super; margin-left: 2px; }
     /* User Dashboard Section Styles */
-    #user {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 10px;
-    }
-    #user h2, #user h3 {
-      font-family: 'Times New Roman', serif;
-      font-size: 32px;
-      color: #98fb98;
-      margin: 10px 0;
-    }
-    #user p {
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
-      color: #ffffff;
-      margin: 10px 0;
-    }
-    .data-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      max-width: 800px;
-      margin: 10px auto;
-    }
-    .reading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .records-list {
-      list-style: none;
-      padding: 0;
-    }
+    #user { background: rgba(0,0,0,0.6); padding: 10px; }
+    #user h2, #user h3 { font-size: 32px; color: #98fb98; margin: 10px 0; }
+    #user p { font-size: 18px; color: #ffffff; margin: 10px 0; }
     .user-profile {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 400px;
-      margin: 10px auto;
-      text-align: center;
+      background: rgba(0,0,0,0.6); padding: 20px; border-radius: 8px; max-width: 400px;
+      margin: 10px auto; text-align: center;
     }
-    .profile-picture {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin: 10px auto;
-      display: block;
-      object-fit: cover;
-    }
+    .profile-picture { width: 100px; height: 100px; border-radius: 50%; margin: 10px auto; display: block; object-fit: cover; }
     .profile-picture-placeholder {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px auto;
-      color: #666;
-      font-family: 'Times New Roman', serif;
+      width: 100px; height: 100px; border-radius: 50%; background: #ccc;
+      display: flex; align-items: center; justify-content: center; margin: 10px auto; color: #666;
     }
-    .upload-picture {
-      margin: 10px 0;
-    }
-    .upload-picture input {
-      display: none;
-    }
+    .upload-picture { margin: 10px 0; }
+    .upload-picture input { display: none; }
     .upload-picture label {
-      background: #32cd32;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
+      background: #32cd32; color: white; padding: 8px 16px; border-radius: 5px;
+      cursor: pointer; font-size: 18px;
     }
-    .user-profile dl {
-      margin: 0;
-    }
+    .user-profile dl { margin: 0; }
     .user-profile dt {
-      font-family: 'Times New Roman', serif;
-      font-weight: bold;
-      font-size: 18px;
-      color: #cccccc;
-      margin-top: 15px;
+      font-weight: bold; font-size: 18px; color: #cccccc; margin-top: 15px;
     }
     .user-profile dd {
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
-      color: #ffffff;
-      margin: 5px 0 0;
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
+      font-size: 18px; color: #ffffff; margin: 5px 0 0; border-bottom: 1px solid #444; padding-bottom: 5px;
     }
-    .edit-button, .save-button {
-      background: #1e90ff;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: 'Times New Roman', serif;
-      font-size: 18px;
-      margin-top: 10px;
+    .edit-button, .save-button { background: #1e90ff; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 10px; }
+    .delete-button { background: #ff4444; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 10px; }
+    .footer { margin-top: 20px; font-size: 16px; color: white; text-align: center; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: 999; display: none; }
+    .overlay.active { display: block; }
+    /* Deletion Modal Styles */
+    #delete-modal {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8); padding: 30px; border-radius: 10px; z-index: 1100; color: #fff;
+      text-align: center; width: 90%; max-width: 400px; display: none;
     }
-    .footer {
-      margin-top: 20px;
-      font-family: 'Times New Roman', serif;
+    #delete-modal button {
+      margin: 10px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;
       font-size: 16px;
-      color: white;
-      text-align: center;
     }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      z-index: 999;
-      display: none;
-    }
-    .overlay.active {
-      display: block;
-    }
+    #delete-modal .confirm { background: #ff4444; color: #fff; }
+    #delete-modal .cancel { background: #1e90ff; color: #fff; }
     @media (max-width: 768px) {
-      .content {
-        padding: 5px;
-      }
-      #home, #records, #user {
-        padding: 5px;
-      }
-      .data-container, .user-profile {
-        margin: 5px auto;
-      }
-      .welcome-card, .slideshow-container {
-        position: static;
-        transform: none;
-        margin: 20px auto;
-      }
-      .footnote {
-        position: static;
-        margin-top: 20px;
-      }
+      .content, #home, #records, #user { padding: 5px; }
+      .data-container, .user-profile { margin: 5px auto; }
+      .welcome-card, .slideshow-container { position: static; transform: none; margin: 20px auto; }
+      .footnote { position: static; margin-top: 20px; }
     }
   </style>
 </head>
 <body class="login-active">
-  <!-- Header removed completely -->
   <!-- Login Section -->
   <div class="login-section active" id="login-section">
     <div class="login-box">
@@ -786,6 +337,19 @@
           <label for="reg-password">Password</label>
           <input type="password" id="reg-password" name="password" placeholder="Enter Password" required>
           <span class="toggle-password" id="toggle-password-reg">Show</span>
+        </div>
+        <!-- New: Role Selection -->
+        <div class="form-group">
+          <label for="reg-role">Select Role</label>
+          <select id="reg-role" name="role" required>
+            <option value="user" selected>User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <!-- Secret Key field (only shown if admin selected) -->
+        <div class="form-group hidden" id="secret-key-group">
+          <label for="reg-secret-key">Secret Key (for Admin)</label>
+          <input type="text" id="reg-secret-key" name="secret_key" placeholder="Enter secret key">
         </div>
         <div class="buttons">
           <button type="submit" class="signin-button">REGISTER</button>
@@ -922,7 +486,7 @@
       <!-- User Dashboard Section -->
       <div id="user" class="section">
         <h2>User Dashboard</h2>
-        <p>Manage your profile, settings, and access detailed reports on your irrigation system.</p>
+        <p>Manage your profile, settings, and view your verified account details.</p>
         <div class="user-profile">
           <div id="profile-picture-container">
             <img id="profile-picture" class="profile-picture" alt="Profile Picture" style="display: none;">
@@ -942,15 +506,29 @@
           </dl>
           <button class="edit-button" id="edit-profile">Edit Profile</button>
           <button class="save-button" id="save-profile" style="display: none;">Save Changes</button>
-          <!-- Delete Account Button -->
           <button class="delete-button" id="delete-account">Delete Account</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Deletion Modal -->
+  <div id="delete-modal">
+    <h3>Are you sure you want to delete your account?</h3>
+    <p>This action cannot be undone.</p>
+    <button class="confirm" id="confirm-delete">Yes, Delete My Account</button>
+    <button class="cancel" id="cancel-delete">No, Keep My Account</button>
+  </div>
+
+  <!-- Demo Verification Section (for testing email verification) -->
+  <div id="demo-verification" class="hidden" style="padding:20px; background:#222; color:#fff; text-align:center;">
+    <h3>Email Verification</h3>
+    <p>Click the link below to verify your email:</p>
+    <a href="#" id="demo-verify-link" style="color:#00ccff; text-decoration:underline;">Verify Email</a>
+  </div>
+
   <script>
-    // Elements for login/registration and dashboard
+    // --- Elements ---
     const loginSection = document.getElementById('login-section');
     const dashboardSection = document.getElementById('dashboard-section');
     const loginForm = document.getElementById('login-form');
@@ -968,6 +546,14 @@
     const recordsTimer = document.getElementById('records-timer');
     const dateTimeDisplay = document.getElementById('date-time');
     const deleteAccountBtn = document.getElementById('delete-account');
+    // Deletion Modal Elements
+    const deleteModal = document.getElementById('delete-modal');
+    const confirmDeleteBtn = document.getElementById('confirm-delete');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
+    // Registration new fields for role and secret key
+    const regRole = document.getElementById('reg-role');
+    const secretKeyGroup = document.getElementById('secret-key-group');
+    const regSecretKey = document.getElementById('reg-secret-key');
     // User Profile Elements
     const profilePicture = document.getElementById('profile-picture');
     const profilePicturePlaceholder = document.getElementById('profile-picture-placeholder');
@@ -977,36 +563,27 @@
     const roleDisplay = document.getElementById('role');
     const editProfileButton = document.getElementById('edit-profile');
     const saveProfileButton = document.getElementById('save-profile');
-
-    // Password toggle elements
+    // Password Toggle Elements
     const togglePasswordLogin = document.getElementById('toggle-password-login');
     const togglePasswordReg = document.getElementById('toggle-password-reg');
+    // Demo Verification
+    const demoVerification = document.getElementById('demo-verification');
+    const demoVerifyLink = document.getElementById('demo-verify-link');
 
-    // Track login state
+    // --- Track Login State ---
     let isLoggedIn = false;
-    // Detect online mode
     const isOnlineMode = window.location.protocol === 'http:' || window.location.protocol === 'https:';
-    // Timer variables for Saved Records
     let timerStart = null;
     let lastData = null;
     let timerInterval = null;
-    // User profile data (default)
-    let userProfile = {
-      username: 'admin',
-      email: 'admin@example.com',
-      role: 'Administrator',
-      picture: null
-    };
+    // Default user profile
+    let userProfile = { username: 'admin', email: 'admin@example.com', role: 'Administrator', picture: null };
 
-    // Load user profile from localStorage if available
     function loadUserProfile() {
       const savedProfile = localStorage.getItem('userProfile');
-      if (savedProfile) {
-        userProfile = JSON.parse(savedProfile);
-      }
+      if (savedProfile) { userProfile = JSON.parse(savedProfile); }
       updateUserProfileDisplay();
     }
-    // Update user profile display
     function updateUserProfileDisplay() {
       usernameDisplay.textContent = userProfile.username;
       emailDisplay.textContent = userProfile.email;
@@ -1020,12 +597,10 @@
         profilePicturePlaceholder.style.display = 'flex';
       }
     }
-    // Save user profile to localStorage
     function saveUserProfile() {
       localStorage.setItem('userProfile', JSON.stringify(userProfile));
       updateUserProfileDisplay();
     }
-    // Handle profile picture upload
     profilePictureInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -1037,7 +612,6 @@
         reader.readAsDataURL(file);
       }
     });
-    // Handle edit profile
     editProfileButton.addEventListener('click', () => {
       usernameDisplay.contentEditable = true;
       emailDisplay.contentEditable = true;
@@ -1048,7 +622,6 @@
       editProfileButton.style.display = 'none';
       saveProfileButton.style.display = 'block';
     });
-    // Handle save profile
     saveProfileButton.addEventListener('click', async () => {
       userProfile.username = usernameDisplay.textContent;
       userProfile.email = emailDisplay.textContent;
@@ -1062,7 +635,6 @@
       editProfileButton.style.display = 'block';
       saveProfileButton.style.display = 'none';
       saveUserProfile();
-      // Update server-side credentials via API
       try {
         const response = await fetch('/api/updateuser', {
           method: 'POST',
@@ -1070,27 +642,14 @@
           body: JSON.stringify({username: userProfile.username, email: userProfile.email})
         });
         const result = await response.json();
-        if (!response.ok) {
-          alert(result.message);
-        }
-      } catch (error) {
-        alert("Error updating user. Please try again.");
-      }
+        if (!response.ok) { alert(result.message); }
+      } catch (error) { alert("Error updating user. Please try again."); }
     });
-    // Update date and time display
     function updateDateTime() {
       const now = new Date();
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
+      const options = {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'};
       dateTimeDisplay.textContent = now.toLocaleDateString('en-US', options);
     }
-    // On page load, show login page
     window.addEventListener('load', () => {
       isLoggedIn = false;
       loginSection.classList.add('active');
@@ -1102,7 +661,6 @@
       updateDateTime();
       setInterval(updateDateTime, 1000);
     });
-    // Show dashboard
     function showDashboard() {
       loginSection.classList.remove('active');
       dashboardSection.classList.add('active');
@@ -1114,7 +672,15 @@
       startTimer();
       startSlideshow();
     }
-    // Login form submission
+    // --- Registration: Show secret key field when admin selected ---
+    regRole.addEventListener('change', () => {
+      if (regRole.value === 'admin') {
+        secretKeyGroup.classList.remove('hidden');
+      } else {
+        secretKeyGroup.classList.add('hidden');
+        regSecretKey.value = '';
+      }
+    });
     loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('irrigator-id').value;
@@ -1136,21 +702,26 @@
         errorMessage.textContent = 'An error occurred. Please try again.';
       }
     });
-    // Registration form submission
     registerForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       const username = document.getElementById('reg-username').value;
       const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
+      const role = document.getElementById('reg-role').value;
+      const secret_key = regSecretKey.value;
       try {
         const response = await fetch('/api/register', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({username, email, password})
+          body: JSON.stringify({username, email, password, role, secret_key})
         });
         const result = await response.json();
         if (response.ok) {
-          alert('Registration successful! Please log in.');
+          alert('Registration successful! Please check your email for the verification link.');
+          // For demo, show the verification link:
+          demoVerification.classList.remove('hidden');
+          demoVerifyLink.href = result.verification_link;
+          demoVerifyLink.textContent = result.verification_link;
           registerForm.classList.add('hidden');
           loginForm.classList.remove('hidden');
         } else {
@@ -1160,7 +731,6 @@
         regErrorMessage.textContent = 'An error occurred. Please try again.';
       }
     });
-    // Toggle between login and registration forms
     toggleRegister.addEventListener('click', () => {
       loginForm.classList.add('hidden');
       registerForm.classList.remove('hidden');
@@ -1169,39 +739,40 @@
       registerForm.classList.add('hidden');
       loginForm.classList.remove('hidden');
     });
-    // Google Sign-In button click
     googleSigninBtn.addEventListener('click', () => {
       window.location.href = '/api/google';
     });
-    // Delete Account button functionality
-    deleteAccountBtn.addEventListener('click', async () => {
-      if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-        const username = prompt("Enter your username:");
-        const password = prompt("Enter your password:");
-        try {
-          const response = await fetch('/api/deleteaccount', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({username, password})
-          });
-          const result = await response.json();
-          if (response.ok) {
-            alert(result.message);
-            window.location.reload();
-          } else {
-            alert(result.message);
-          }
-        } catch (error) {
-          alert("Error deleting account. Please try again.");
+    // --- Delete Account: Open modal window ---
+    deleteAccountBtn.addEventListener('click', () => {
+      deleteModal.style.display = 'block';
+    });
+    confirmDeleteBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/deleteaccount', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({username: userProfile.username, password: prompt("Please enter your password to confirm deletion:")})
+        });
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+          window.location.reload();
+        } else {
+          alert(result.message);
+          deleteModal.style.display = 'none';
         }
+      } catch (error) {
+        alert("Error deleting account. Please try again.");
+        deleteModal.style.display = 'none';
       }
     });
-    // Forgot Password redirection
+    cancelDeleteBtn.addEventListener('click', () => {
+      deleteModal.style.display = 'none';
+    });
     document.querySelectorAll('.links a')[0].addEventListener('click', function(e) {
       e.preventDefault();
       window.location.href = 'reset-password.html';
     });
-    // Toggle sidebar, overlay, and content shift
     hamburger.addEventListener('click', () => {
       sidebar.classList.toggle('active');
       overlay.classList.toggle('active');
@@ -1212,7 +783,6 @@
       overlay.classList.remove('active');
       content.classList.remove('shifted');
     });
-    // Menu navigation with mirror transition
     let currentSection = 'welcome';
     document.querySelectorAll('.menu a').forEach(link => {
       link.addEventListener('click', function(e) {
@@ -1222,9 +792,7 @@
         const targetSectionElement = document.getElementById(target);
         currentSectionElement.classList.add('mirror-out');
         setTimeout(() => {
-          document.querySelectorAll('.section').forEach(section => {
-            section.classList.remove('active');
-          });
+          document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
           targetSectionElement.classList.add('active', 'mirror-in');
           if (target === 'welcome') {
             document.body.style.backgroundImage = "url('pictures/pexels-dakota-gillette-18281-89749.jpg')";
@@ -1237,44 +805,20 @@
           }
           currentSection = target;
         }, 500);
-        document.querySelectorAll('.menu a').forEach(a => {
-          a.classList.remove('active');
-        });
+        document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
         this.classList.add('active');
         sidebar.classList.remove('active');
         overlay.classList.remove('active');
         content.classList.remove('shifted');
       });
     });
-    // Function to simulate data updates if fetching fails
-    function simulateData() {
-      return {
-        temperature: (Math.random() * (35 - 15) + 15).toFixed(2),
-        humidity: (Math.random() * (80 - 30) + 30).toFixed(2),
-        soilMoisture: (Math.random() * (40 - 20) + 20).toFixed(2),
-        soilPH: (Math.random() * (7.5 - 5.5) + 5.5).toFixed(2),
-        lightIntensity: (Math.random() * (1000 - 100) + 100).toFixed(2),
-        anomaly: Math.random() > 0.9 ? "True" : "False"
-      };
-    }
-    // Function to fetch and update readings for Home and Saved Records sections
+    // --- Data Updates (Fetch from backend) ---
     async function updateReadings() {
       if (!isLoggedIn) return;
       try {
-        let data;
-        if (isOnlineMode) {
-          const response = await fetch('/api/irrigation-data');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          data = await response.json();
-        } else {
-          const response = await fetch('irrigation_data.json');
-          if (!response.ok) {
-            throw new Error('Failed to read irrigation_data.json');
-          }
-          data = await response.json();
-        }
+        const response = await fetch('/api/irrigation-data');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
         const dataString = JSON.stringify(data);
         if (lastData !== dataString) {
           lastData = dataString;
@@ -1295,42 +839,14 @@
         updatePieChart(data);
       } catch (error) {
         console.error('Error fetching data:', error);
-        const simulatedData = simulateData();
-        const dataString = JSON.stringify(simulatedData);
-        if (lastData !== dataString) {
-          lastData = dataString;
-          resetTimer();
-        }
-        document.getElementById('temperature').innerHTML = `${simulatedData.temperature}<span class="unit">°C</span>`;
-        document.getElementById('humidity').innerHTML = `${simulatedData.humidity}<span class="unit">%</span>`;
-        document.getElementById('soil-moisture').innerHTML = `${simulatedData.soilMoisture}<span class="unit">%</span>`;
-        document.getElementById('soil-ph').textContent = simulatedData.soilPH;
-        document.getElementById('light-intensity').innerHTML = `${simulatedData.lightIntensity}<span class="unit"> lux</span>`;
-        document.getElementById('anomaly').textContent = simulatedData.anomaly;
-        document.getElementById('records-temperature').innerHTML = `${simulatedData.temperature}<span class="unit">°C</span>`;
-        document.getElementById('records-humidity').innerHTML = `${simulatedData.humidity}<span class="unit">%</span>`;
-        document.getElementById('records-soil-moisture').innerHTML = `${simulatedData.soilMoisture}<span class="unit">%</span>`;
-        document.getElementById('records-soil-ph').textContent = simulatedData.soilPH;
-        document.getElementById('records-light-intensity').innerHTML = `${simulatedData.lightIntensity}<span class="unit"> lux</span>`;
-        document.getElementById('records-anomaly').textContent = simulatedData.anomaly;
-        updatePieChart(simulatedData);
       }
     }
-    // Function to fetch and update the records list
     async function updateRecordsList() {
       if (!isLoggedIn) return;
       try {
-        let records;
-        if (isOnlineMode) {
-          const response = await fetch('/api/records');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          records = await response.json();
-        } else {
-          recordsList.innerHTML = '<li>Record listing is only available in online mode.</li>';
-          return;
-        }
+        const response = await fetch('/api/records');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const records = await response.json();
         if (records.length === 0) {
           recordsList.innerHTML = '<li>No records available.</li>';
         } else {
@@ -1344,22 +860,19 @@
         recordsList.innerHTML = '<li>Error loading records.</li>';
       }
     }
-    // Function to start data updates for Home and Saved Records sections
     function startDataUpdates() {
       updateReadings();
-      setInterval(updateReadings, 5000);
+      setInterval(updateReadings, 10000); // update every 10 seconds from backend
     }
-    // Function to start records updates
     function startRecordsUpdates() {
       updateRecordsList();
       setInterval(updateRecordsList, 10000);
     }
-    // Timer functions for Saved Records
     function startTimer() {
       timerStart = performance.now();
       timerInterval = setInterval(() => {
         const elapsed = (performance.now() - timerStart) / 1000;
-        const remaining = 5 - (elapsed % 5);
+        const remaining = 10 - (elapsed % 10);
         const seconds = Math.floor(remaining);
         const microseconds = Math.floor((remaining - seconds) * 1000);
         recordsTimer.textContent = `Next update in: ${seconds}.${microseconds.toString().padStart(3, '0')}s`;
@@ -1367,12 +880,8 @@
     }
     function resetTimer() {
       timerStart = performance.now();
-      const remaining = 5;
-      const seconds = Math.floor(remaining);
-      const microseconds = 0;
-      recordsTimer.textContent = `Next update in: ${seconds}.${microseconds.toString().padStart(3, '0')}s`;
+      recordsTimer.textContent = 'Next update in: 10.000s';
     }
-    // Slideshow functionality for Welcome section
     function startSlideshow() {
       const images = document.querySelectorAll('.slideshow-image');
       let currentIndex = 0;
@@ -1385,28 +894,43 @@
       }
       setInterval(showNextImage, 5000);
     }
-    // ------------------ Show/Hide Password Toggle Logic ------------------ //
+    function updatePieChart(data) {
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const values = [
+        parseFloat(data.temperature),
+        parseFloat(data.humidity),
+        parseFloat(data.soilMoisture),
+        parseFloat(data.soilPH),
+        parseFloat(data.lightIntensity)
+      ];
+      if(window.myPieChart) {
+        window.myPieChart.data.datasets[0].data = values;
+        window.myPieChart.update();
+      } else {
+        window.myPieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Temperature', 'Humidity', 'Soil Moisture', 'Soil pH', 'Light Intensity'],
+            datasets: [{
+              data: values,
+              backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8bc34a', '#9c27b0']
+            }]
+          },
+          options: { responsive: true }
+        });
+      }
+    }
     togglePasswordLogin.addEventListener('click', function() {
       const passField = document.getElementById('access-code');
-      if (passField.type === 'password') {
-        passField.type = 'text';
-        this.textContent = 'Hide';
-      } else {
-        passField.type = 'password';
-        this.textContent = 'Show';
-      }
+      if (passField.type === 'password') { passField.type = 'text'; this.textContent = 'Hide'; }
+      else { passField.type = 'password'; this.textContent = 'Show'; }
     });
     togglePasswordReg.addEventListener('click', function() {
       const passField = document.getElementById('reg-password');
-      if (passField.type === 'password') {
-        passField.type = 'text';
-        this.textContent = 'Hide';
-      } else {
-        passField.type = 'password';
-        this.textContent = 'Show';
-      }
+      if (passField.type === 'password') { passField.type = 'text'; this.textContent = 'Hide'; }
+      else { passField.type = 'password'; this.textContent = 'Show'; }
     });
-    // Start updates on load
+    // Start periodic updates
     startDataUpdates();
     startRecordsUpdates();
     startTimer();
